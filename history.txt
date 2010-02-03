@@ -1,0 +1,13 @@
+HISTORY -=- Last edit Time-stamp: <03/02/2010 16:01 sebastien@PC-SEBASTIEN>
+=======
+
+2010-02-2 - start of the project
+
+;;----------------------------------------------------------------------------
+;; Local Variables:
+;; mode:text
+;; fill-column:90
+;; indent-tabs-mode:nil
+;; tab-stop-list:(2 4 6 8 16 24 32 40 48 56 64 72 80 88 96 104 112 120)
+;; time-stamp-format: "%02d/%02m/%:y %02H:%02M %u@%s"
+;; End:
