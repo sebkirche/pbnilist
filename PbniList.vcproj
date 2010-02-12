@@ -44,7 +44,8 @@
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				BrowseInformation="0"
-				DebugInformationFormat="4"
+				WarningLevel="2"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -121,7 +122,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="1"
+				InlineFunctionExpansion="2"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="&quot;C:\Program Files\Sybase\PowerBuilder 11.5\SDK\PBNI\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;UNICODE;PbniList_EXPORTS"
 				RuntimeLibrary="0"
@@ -147,7 +149,7 @@
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Sybase\PowerBuilder 11.5\SDK\PBNI\lib&quot;"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libc.lib "
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="2"
 				ImportLibrary="$(OutDir)/PbniList.lib"
 				TargetMachine="1"
@@ -188,11 +190,15 @@
 			Filter="cpp"
 			>
 			<File
+				RelativePath=".\List.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Main.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PbniList.cpp"
+				RelativePath=".\Vector.cpp"
 				>
 			</File>
 		</Filter>
@@ -201,11 +207,15 @@
 			Filter="h"
 			>
 			<File
+				RelativePath=".\List.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Main.h"
 				>
 			</File>
 			<File
-				RelativePath=".\PbniList.h"
+				RelativePath=".\Vector.h"
 				>
 			</File>
 		</Filter>
@@ -217,6 +227,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\bench.xls"
+			>
+		</File>
 		<File
 			RelativePath=".\history.txt"
 			>

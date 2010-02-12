@@ -1,5 +1,7 @@
-HISTORY -=- Last edit Time-stamp: <03/02/2010 16:01 sebastien@PC-SEBASTIEN>
+HISTORY -=- Last edit Time-stamp: <12/02/2010 19:17 sebastien@PC-SEBASTIEN>
 =======
+
+2010-02-12 - added the vector implementation + benchmarks
 
 2010-02-2 - start of the project
 

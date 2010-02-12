@@ -56,7 +56,7 @@ BEGIN
     BEGIN
         BLOCK "140c04b0"
         BEGIN
-            VALUE "Comments", "PbniList, a linked list object for PowerBuilder"
+            VALUE "Comments", "PbniList, a linked list and vector object for PowerBuilder"
             VALUE "FileDescription", "PbniList Powerbuilder Extension"
 #ifdef _DEBUG
 			" - DEBUG"
@@ -68,7 +68,7 @@ BEGIN
             VALUE "LegalCopyright", "Copyright © 2010 Sébastien Kirche"
             VALUE "OriginalFilename", "PbniList.pbx"
             VALUE "ProductName", "PbniList Powerbuilder Extension"
-            VALUE "ProductVersion", "0.1"
+            VALUE "ProductVersion", "0.2"
         END
     END
     BLOCK "VarFileInfo"

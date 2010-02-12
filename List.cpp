@@ -1,7 +1,7 @@
-// PbniList.cpp : PBNI class
+// List.cpp : PBNI class
 #define _CRT_SECURE_NO_DEPRECATE
 
-#include "PbniList.h"
+#include "List.h"
 
 #ifdef _DEBUG
 #define	VERSION_STR	_T(" (Debug version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
@@ -10,24 +10,24 @@
 #endif
 
 // default constructor
-PbniList::PbniList()
+List::List()
 {
 }
 
-PbniList::PbniList( IPB_Session * pSession )
+List::List( IPB_Session * pSession )
 :m_pSession( pSession )
 {
 	m_cursor = m_list.begin();
 }
 
 // destructor
-PbniList::~PbniList()
+List::~List()
 {
 	DoPurge();
 }
 
 // method called by PowerBuilder to invoke PBNI class methods
-PBXRESULT PbniList::Invoke
+PBXRESULT List::Invoke
 (
 	IPB_Session * session,
 	pbobject obj,
@@ -72,20 +72,23 @@ PBXRESULT PbniList::Invoke
 		case mid_Purge:
 			pbxr = this->Purge(ci);
 			break;
-		case mid_Next:
-			pbxr = this->Next(ci);
+		case mid_GetNext:
+			pbxr = this->GetNext(ci);
 			break;
-		case mid_Previous:
-			pbxr = this->Previous(ci);
+		case mid_GetAndNext:
+			pbxr = this->GetAndNext(ci);
+			break;
+		case mid_GetPrevious:
+			pbxr = this->GetPrevious(ci);
 			break;
 		case mid_Rewind:
 			pbxr = this->Rewind(ci);
 			break;
-		case mid_First:
-			pbxr = this->First(ci);
+		case mid_GetFirst:
+			pbxr = this->GetFirst(ci);
 			break;
-		case mid_Last:
-			pbxr = this->Last(ci);
+		case mid_GetLast:
+			pbxr = this->GetLast(ci);
 			break;
 		case mid_Prepend:
 			pbxr = this->Prepend(ci);
@@ -99,6 +102,15 @@ PBXRESULT PbniList::Invoke
 		case mid_InsertAfter:
 			pbxr = this->InsertAfter(ci);
 			break;
+		case mid_HasNext:
+			pbxr = this->HasNext(ci);
+			break;
+		case mid_Position:
+			pbxr = this->Position(ci);
+			break;
+		//case mid_Sort:
+		//	pbxr = this->Sort(ci);
+		//	break;
 		default:
 			pbxr = PBX_E_INVOKE_METHOD_AMBIGUOUS;
 	}
@@ -107,27 +119,26 @@ PBXRESULT PbniList::Invoke
 }
 
 
-void PbniList::Destroy() 
+void List::Destroy() 
 {
    delete this;
 }
 
 // Method callable from PowerBuilder
-PBXRESULT PbniList::Hello( PBCallInfo * ci )
+PBXRESULT List::Hello( PBCallInfo * ci )
 {
 	PBXRESULT	pbxr = PBX_OK;
 
 	// return value
-	ci->returnValue->SetString( _T("Hello from PbniList") VERSION_STR );
+	ci->returnValue->SetString( _T("Hello from List") VERSION_STR );
 
 	return pbxr;
 }
 
 //Append some data to the list
-PBXRESULT PbniList::Append( PBCallInfo * ci )
+PBXRESULT List::Append( PBCallInfo * ci )
 {
 	PBXRESULT	pbxr = PBX_OK;
-	int keyLen;
 	bool bFirstAdd;
 
 	bFirstAdd = m_list.empty();
@@ -139,10 +150,9 @@ PBXRESULT PbniList::Append( PBCallInfo * ci )
 }
 
 //Insert some data at the begining of the list
-PBXRESULT PbniList::Prepend( PBCallInfo * ci )
+PBXRESULT List::Prepend( PBCallInfo * ci )
 {
 	PBXRESULT	pbxr = PBX_OK;
-	int keyLen;
 	bool bFirstAdd;
 
 	bFirstAdd = m_list.empty();
@@ -154,10 +164,9 @@ PBXRESULT PbniList::Prepend( PBCallInfo * ci )
 }
 
 //Insert some data at the current cursor position
-PBXRESULT PbniList::Insert( PBCallInfo * ci )
+PBXRESULT List::Insert( PBCallInfo * ci )
 {
 	PBXRESULT	pbxr = PBX_OK;
-	int keyLen;
 	bool bFirstAdd;
 
 	bFirstAdd = m_list.empty();
@@ -170,7 +179,7 @@ PBXRESULT PbniList::Insert( PBCallInfo * ci )
 }
 
 //Return the data at the current cursor pos or null
-PBXRESULT PbniList::Get(PBCallInfo *ci)
+PBXRESULT List::Get(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	IPB_Value *data;
@@ -183,7 +192,7 @@ PBXRESULT PbniList::Get(PBCallInfo *ci)
 }
 
 //Assign the data at the current cursor pos
-PBXRESULT PbniList::Set(PBCallInfo *ci)
+PBXRESULT List::Set(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	IPB_Value *data;
@@ -199,7 +208,7 @@ PBXRESULT PbniList::Set(PBCallInfo *ci)
 }
 
 //Return the data at the given cursor pos
-PBXRESULT PbniList::GetAt(PBCallInfo *ci)
+PBXRESULT List::GetAt(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	IPB_Value *data;
@@ -215,16 +224,20 @@ PBXRESULT PbniList::GetAt(PBCallInfo *ci)
 		if((pos < 1) || (pos > m_list.size()))
 			pbxr = PBX_E_INVALID_ARGUMENT;
 		else{
-			i = m_list.begin();
-			advance(i, pos - 1);
-			m_pSession->SetValue(ci->returnValue, *i);
+		if(pos > 0){
+				i = m_list.begin();
+				advance(i, pos - 1);
+				m_pSession->SetValue(ci->returnValue, *i);
+		}
+		else
+			pbxr = PBX_E_INVALID_ARGUMENT;
 		}
 	}
 	return pbxr;
 }
 
 //Assign the data at the given cursor pos
-PBXRESULT PbniList::SetAt(PBCallInfo *ci)
+PBXRESULT List::SetAt(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	list<IPB_Value *>::iterator i;
@@ -236,16 +249,20 @@ PBXRESULT PbniList::SetAt(PBCallInfo *ci)
 	if(pos > m_list.size())
 		m_list.push_back(data);
 	else{
-		i = m_list.begin();
-		advance(i, pos - 1);
-		m_pSession->ReleaseValue(*i);
-		*i = data;
+		if(pos > 0){
+			i = m_list.begin();
+			advance(i, pos - 1);
+			m_pSession->ReleaseValue(*i);
+			*i = data;
+		}
+		else
+			pbxr = PBX_E_INVALID_ARGUMENT;
 	}
 	return pbxr;
 }
 
 //Insert the data before the given cursor pos
-PBXRESULT PbniList::InsertBefore(PBCallInfo *ci)
+PBXRESULT List::InsertBefore(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	list<IPB_Value *>::iterator i;
@@ -265,7 +282,7 @@ PBXRESULT PbniList::InsertBefore(PBCallInfo *ci)
 }
 
 //Insert the data after the given cursor pos
-PBXRESULT PbniList::InsertAfter(PBCallInfo *ci)
+PBXRESULT List::InsertAfter(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	list<IPB_Value *>::iterator i;
@@ -285,7 +302,7 @@ PBXRESULT PbniList::InsertAfter(PBCallInfo *ci)
 }
 
 //Remove the data at the current cursor pos
-PBXRESULT PbniList::Remove(PBCallInfo *ci)
+PBXRESULT List::Remove(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	IPB_Value *data;
@@ -300,7 +317,7 @@ PBXRESULT PbniList::Remove(PBCallInfo *ci)
 }
 
 //Remove the data at the current cursor pos
-PBXRESULT PbniList::RemoveAt(PBCallInfo *ci)
+PBXRESULT List::RemoveAt(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	IPB_Value *data;
@@ -327,7 +344,7 @@ PBXRESULT PbniList::RemoveAt(PBCallInfo *ci)
 }
 
 //Return the current list size
-PBXRESULT PbniList::Size(PBCallInfo *ci)
+PBXRESULT List::Size(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	pbulong ulRet = m_list.size();
@@ -336,8 +353,28 @@ PBXRESULT PbniList::Size(PBCallInfo *ci)
 	return pbxr;
 }
 
+//Return the current cursor position
+PBXRESULT List::Position(PBCallInfo *ci)
+{
+	PBXRESULT	pbxr = PBX_OK;
+	pbulong ulRet = distance(m_list.begin(), m_cursor) + 1;
+	ci->returnValue->SetUlong(ulRet);
+
+	return pbxr;
+}
+
+//tells if the cursor is not yet on the last element
+PBXRESULT List::HasNext(PBCallInfo *ci)
+{
+	PBXRESULT	pbxr = PBX_OK;
+	pbboolean bHasNext = !m_list.empty() && (*m_cursor != m_list.back());
+	ci->returnValue->SetBool(bHasNext);
+
+	return pbxr;
+}
+
 //Return the maximum list size (system dependent)
-PBXRESULT PbniList::MaxSize(PBCallInfo *ci)
+PBXRESULT List::MaxSize(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	pbulong ulRet = m_list.max_size();
@@ -346,7 +383,7 @@ PBXRESULT PbniList::MaxSize(PBCallInfo *ci)
 	return pbxr;
 }
 
-PBXRESULT PbniList::Purge(PBCallInfo *ci)
+PBXRESULT List::Purge(PBCallInfo *ci)
 {
 	PBXRESULT pbxr = PBX_OK;
 
@@ -354,7 +391,7 @@ PBXRESULT PbniList::Purge(PBCallInfo *ci)
 	return pbxr;
 }
  
-void PbniList::DoPurge()
+void List::DoPurge()
 {
 	list<IPB_Value *>::iterator it;
 
@@ -366,18 +403,29 @@ void PbniList::DoPurge()
 	m_cursor = m_list.begin();
 }
 
-//Return the next data after the current pos
-PBXRESULT PbniList::Next(PBCallInfo *ci)
+//Return the current data then increase cursor
+PBXRESULT List::GetAndNext(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	IPB_Value *data;
 	
 	if(m_cursor != m_list.end()){
+		m_pSession->SetValue(ci->returnValue, *m_cursor++);
+	}
+	else
+		ci->returnValue->SetToNull();
+	return pbxr;
+}
+
+//Return the next data after the current pos
+PBXRESULT List::GetNext(PBCallInfo *ci)
+{
+	PBXRESULT	pbxr = PBX_OK;
+	IPB_Value *data;
+	
+	if(*m_cursor != m_list.back()){
 		m_cursor++;
-		if(m_cursor != m_list.end())
-			m_pSession->SetValue(ci->returnValue, *m_cursor);
-		else
-			ci->returnValue->SetToNull();
+		m_pSession->SetValue(ci->returnValue, *m_cursor);
 	}
 	else
 		ci->returnValue->SetToNull();
@@ -385,7 +433,7 @@ PBXRESULT PbniList::Next(PBCallInfo *ci)
 }
 
 //Return the previous data before the current pos
-PBXRESULT PbniList::Previous(PBCallInfo *ci)
+PBXRESULT List::GetPrevious(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	IPB_Value *data;
@@ -400,7 +448,7 @@ PBXRESULT PbniList::Previous(PBCallInfo *ci)
 }
 
 //rewind the cursor to the begining
-PBXRESULT PbniList::Rewind(PBCallInfo *ci)
+PBXRESULT List::Rewind(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	m_cursor = m_list.begin();
@@ -409,7 +457,7 @@ PBXRESULT PbniList::Rewind(PBCallInfo *ci)
 }
 
 //Return the first item or null if empty
-PBXRESULT PbniList::First(PBCallInfo *ci)
+PBXRESULT List::GetFirst(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	IPB_Value *data;
@@ -424,7 +472,7 @@ PBXRESULT PbniList::First(PBCallInfo *ci)
 }
 
 //Return the last item or null if empty
-PBXRESULT PbniList::Last(PBCallInfo *ci)
+PBXRESULT List::GetLast(PBCallInfo *ci)
 {
 	PBXRESULT	pbxr = PBX_OK;
 	IPB_Value *data;
@@ -437,3 +485,12 @@ PBXRESULT PbniList::Last(PBCallInfo *ci)
 		ci->returnValue->SetToNull();
 	return pbxr;
 }
+
+//Sort the list
+//PBXRESULT List::Sort(PBCallInfo *ci)
+//{
+//	PBXRESULT	pbxr = PBX_OK;
+//
+//
+//	return pbxr;
+//}
