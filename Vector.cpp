@@ -1,7 +1,9 @@
 // Vector.cpp : PBNI class
 #define _CRT_SECURE_NO_DEPRECATE
 
+#include "main.h"
 #include "Vector.h"
+#include <algorithm>
 
 #ifdef _DEBUG
 #define	VERSION_STR	_T(" (Debug version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
@@ -114,9 +116,9 @@ PBXRESULT Vector::Invoke
 		case mid_Position:
 			pbxr = this->Position(ci);
 			break;
-		//case mid_Sort:
-		//	pbxr = this->Sort(ci);
-		//	break;
+		case mid_Sort:
+			pbxr = this->Sort(ci);
+			break;
 		default:
 			pbxr = PBX_E_INVOKE_METHOD_AMBIGUOUS;
 	}
@@ -532,11 +534,54 @@ PBXRESULT Vector::GetLast(PBCallInfo *ci)
 	return pbxr;
 }
 
-//Sort the list
-//PBXRESULT Vector::Sort(PBCallInfo *ci)
-//{
-//	PBXRESULT	pbxr = PBX_OK;
-//
-//
-//	return pbxr;
-//}
+//Sort the vector
+PBXRESULT Vector::Sort(PBCallInfo *ci)
+{
+	PBXRESULT	pbxr = PBX_OK;
+	pbobject pbCompObj;
+	pbclass pbCompClass;
+	pbmethodID pbCompMID;
+
+	if ( ci->pArgs->GetAt(0)->IsNull() || !ci->pArgs->GetAt(0)->IsObject()){
+		pbxr = PBX_E_INVALID_ARGUMENT;
+	}
+	else{
+		pbCompObj = ci->pArgs->GetAt(0)->GetObjectW();
+		//check for object compliance : must implement the function int list_compare(any, any)
+		pbCompClass = m_pSession->GetClass(pbCompObj);
+		if (!pbCompClass)
+			return PBX_E_INVALID_ARGUMENT;
+
+		//Debug
+		//LPCTSTR test = m_pSession->GetClassNameW(m_pbCompClass);
+		//m_pSession->ReleaseString(test);
+
+		pbCompMID = m_pSession->GetMethodID(pbCompClass, L"list_compare", PBRT_FUNCTION, L"IAA", false);
+		//m_pbCompMID = m_pSession->FindMatchingFunction(m_pbCompClass, L"list_compare", PBRT_FUNCTION, L"any, any");
+		if (pbCompMID == kUndefinedMethodID)
+			return PBX_E_INVALID_ARGUMENT;
+
+		std::sort(m_vector.begin(), m_vector.end(),VectorComparator(m_vector, m_pSession, pbCompObj, pbCompClass, pbCompMID));
+	}
+
+	return pbxr;
+}
+
+bool VectorComparator::operator()(IPB_Value *first, IPB_Value *second) const
+{
+	PBCallInfo comp_ci;
+	m_pSession->InitCallInfo(m_pbCompClass, m_pbCompMID, &comp_ci);
+
+	SetCorrectPBValue(comp_ci.pArgs->GetAt(0), first);
+	SetCorrectPBValue(comp_ci.pArgs->GetAt(1), second);
+	
+	m_pSession->InvokeObjectFunction(m_pbCompObj, m_pbCompMID, &comp_ci);
+
+	if (m_pSession->HasExceptionThrown())
+		m_pSession->ClearException();
+	pbint compRet = comp_ci.returnValue->GetInt();
+	m_pSession->FreeCallInfo(&comp_ci);
+
+	return compRet < 0;
+}
+

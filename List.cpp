@@ -1,6 +1,7 @@
 // List.cpp : PBNI class
 #define _CRT_SECURE_NO_DEPRECATE
 
+#include "main.h"
 #include "List.h"
 
 #ifdef _DEBUG
@@ -27,13 +28,7 @@ List::~List()
 }
 
 // method called by PowerBuilder to invoke PBNI class methods
-PBXRESULT List::Invoke
-(
-	IPB_Session * session,
-	pbobject obj,
-	pbmethodID mid,
-	PBCallInfo * ci
-)
+PBXRESULT List::Invoke(IPB_Session *session, pbobject obj, pbmethodID mid, PBCallInfo *ci)
 {
    PBXRESULT pbxr = PBX_OK;
 
@@ -108,9 +103,9 @@ PBXRESULT List::Invoke
 		case mid_Position:
 			pbxr = this->Position(ci);
 			break;
-		//case mid_Sort:
-		//	pbxr = this->Sort(ci);
-		//	break;
+		case mid_Sort:
+			pbxr = this->Sort(ci);
+			break;
 		default:
 			pbxr = PBX_E_INVOKE_METHOD_AMBIGUOUS;
 	}
@@ -243,7 +238,9 @@ PBXRESULT List::SetAt(PBCallInfo *ci)
 	list<IPB_Value *>::iterator i;
 	IPB_Value *data;
 	unsigned long pos;
-	
+	bool bFirstAdd;
+
+	bFirstAdd = m_list.empty();
 	pos = ci->pArgs->GetAt(0)->GetUlong();
 	data = m_pSession->AcquireValue(ci->pArgs->GetAt(1));
 	if(pos > m_list.size())
@@ -258,6 +255,8 @@ PBXRESULT List::SetAt(PBCallInfo *ci)
 		else
 			pbxr = PBX_E_INVALID_ARGUMENT;
 	}
+	if (bFirstAdd)
+		m_cursor = m_list.begin();
 	return pbxr;
 }
 
@@ -487,10 +486,111 @@ PBXRESULT List::GetLast(PBCallInfo *ci)
 }
 
 //Sort the list
-//PBXRESULT List::Sort(PBCallInfo *ci)
-//{
-//	PBXRESULT	pbxr = PBX_OK;
-//
-//
-//	return pbxr;
-//}
+PBXRESULT List::Sort(PBCallInfo *ci)
+{
+	PBXRESULT	pbxr = PBX_OK;
+	pbobject pbCompObj;
+	pbclass pbCompClass;
+	pbmethodID pbCompMID;
+
+	if ( ci->pArgs->GetAt(0)->IsNull() || !ci->pArgs->GetAt(0)->IsObject()){
+		pbxr = PBX_E_INVALID_ARGUMENT;
+	}
+	else{
+		pbCompObj = ci->pArgs->GetAt(0)->GetObjectW();
+		//check for object compliance : must implement the function int list_compare(any, any)
+		pbCompClass = m_pSession->GetClass(pbCompObj);
+		if (!pbCompClass)
+			return PBX_E_INVALID_ARGUMENT;
+
+		//Debug
+		//LPCTSTR test = m_pSession->GetClassNameW(m_pbCompClass);
+		//m_pSession->ReleaseString(test);
+
+		pbCompMID = m_pSession->GetMethodID(pbCompClass, L"list_compare", PBRT_FUNCTION, L"IAA", false);
+		//m_pbCompMID = m_pSession->FindMatchingFunction(m_pbCompClass, L"list_compare", PBRT_FUNCTION, L"any, any");
+		if (pbCompMID == kUndefinedMethodID)
+			return PBX_E_INVALID_ARGUMENT;
+
+		m_list.sort(ListComparator(m_list, m_pSession, pbCompObj, pbCompClass, pbCompMID));
+	}
+
+	return pbxr;
+}
+
+bool ListComparator::operator()(IPB_Value *first, IPB_Value *second) const
+{
+	PBCallInfo comp_ci;
+	m_pSession->InitCallInfo(m_pbCompClass, m_pbCompMID, &comp_ci);
+
+	SetCorrectPBValue(comp_ci.pArgs->GetAt(0), first);
+	SetCorrectPBValue(comp_ci.pArgs->GetAt(1), second);
+	
+	m_pSession->InvokeObjectFunction(m_pbCompObj, m_pbCompMID, &comp_ci);
+
+	if (m_pSession->HasExceptionThrown())
+		m_pSession->ClearException();
+	pbint compRet = comp_ci.returnValue->GetInt();
+	m_pSession->FreeCallInfo(&comp_ci);
+
+	return compRet < 0;
+}
+
+// SetCorrectPBValue : assign correct type to IPB_Value* from another IPB_Value*
+void SetCorrectPBValue(IPB_Value *dest, IPB_Value *src)
+{
+	switch(src->GetType()){
+		case pbvalue_any:
+			//objects, structs goes here ?
+			break;
+		case pbvalue_blob:
+			dest->SetBlob(src->GetBlob());
+			break;
+		case pbvalue_boolean:
+			dest->SetBool(src->GetBool());
+			break;
+		case pbvalue_byte:
+			dest->SetByte(src->GetByte());
+			break;
+		case pbvalue_char:
+			dest->SetChar(src->GetChar());
+			break;
+		case pbvalue_date:
+			dest->SetDate(src->GetDate());
+			break;
+		case pbvalue_datetime:
+			dest->SetDateTime(src->GetDateTime());
+			break;
+		case pbvalue_dec:
+			dest->SetDecimal(src->GetDecimal());
+			break;
+		case pbvalue_double:
+			dest->SetDouble(src->GetDouble());
+			break;
+		case pbvalue_int:
+			dest->SetInt(src->GetInt());
+			break;
+		case pbvalue_long:
+			dest->SetLong(src->GetLong());
+			break;
+		case pbvalue_longlong:
+			dest->SetLongLong(src->GetLongLong());
+			break;
+		case pbvalue_real:
+			dest->SetReal(src->GetReal());
+			break;
+		case pbvalue_string:
+			dest->SetPBString(src->GetString());
+			break;
+		case pbvalue_time:
+			dest->SetTime(src->GetTime());
+			break;
+		case pbvalue_uint:
+			dest->SetUint(src->GetUint());
+			break;
+		case pbvalue_ulong:
+			dest->SetUlong(src->GetUlong());
+			break;
+		//case pbvalue_notype: //and dummy* case pbvalue_type:
+	}
+}

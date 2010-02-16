@@ -10,7 +10,8 @@
 
 // Insert your headers here
 #include <windows.h>
+#include <pbext.h>
 
-// TODO: reference additional headers your program requires here
+extern void SetCorrectPBValue(IPB_Value *dest, IPB_Value *src);
 
 #endif // !defined(MAIN_H)

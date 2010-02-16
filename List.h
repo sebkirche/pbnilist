@@ -2,7 +2,7 @@
 #ifndef CLIST_H
 #define CLIST_H
 
-#include <pbext.h>
+#include "main.h"
 #include <list>
 
 using namespace std;
@@ -52,7 +52,7 @@ public:
 		mid_InsertAfter,
 		mid_HasNext,
 		mid_Position,
-		//mid_Sort,
+		mid_Sort,
 		NO_MORE_METHODS
 	};
 
@@ -83,14 +83,35 @@ protected:
 	PBXRESULT InsertAfter(PBCallInfo * ci);
 	PBXRESULT HasNext(PBCallInfo * ci);
 	PBXRESULT Position(PBCallInfo * ci);
-	//PBXRESULT Sort(PBCallInfo * ci);
+	PBXRESULT Sort(PBCallInfo * ci);
 
 protected:
     // member variables
-    IPB_Session * m_pSession;
+    IPB_Session *m_pSession;
 	list<IPB_Value *> m_list;
 	list<IPB_Value *>::iterator m_cursor;
-	pbobject comparator;
  };
+
+/*
+	ListComparator functor used to sort the List
+	a functor is a class that can be called like a function.
+	It is needed for the sorting process
+*/
+class ListComparator : public binary_function<IPB_Value *, IPB_Value *, bool>
+{
+	const list<IPB_Value *> &m_list;
+    IPB_Session *m_pSession;
+	pbobject m_pbCompObj;
+	pbclass m_pbCompClass;
+	pbmethodID m_pbCompMID;
+public:
+	ListComparator(const list<IPB_Value *> &list, 
+									IPB_Session *session, 
+									pbobject compObj,
+									pbclass compClass, 
+									pbmethodID compMID) 
+									: m_list(list), m_pSession(session), m_pbCompObj(compObj), m_pbCompClass(compClass), m_pbCompMID(compMID) {}
+	bool operator()(IPB_Value *first, IPB_Value *second) const;
+};
 
 #endif	// !defined(CLIST_H)

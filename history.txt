@@ -1,5 +1,7 @@
-HISTORY -=- Last edit Time-stamp: <12/02/2010 19:17 sebastien@PC-SEBASTIEN>
+HISTORY -=- Last edit Time-stamp: <16/02/2010 18:59 sebastien@PC-SEBASTIEN>
 =======
+
+2010-02-16 - implemented the sort() methods for both list and vector
 
 2010-02-12 - added the vector implementation + benchmarks
 
