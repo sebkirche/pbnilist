@@ -1,0 +1,3 @@
+- ajouter 
+	- AddUnique() pour n'ajouter que des éléments qui ne sont pas dans la liste
+	- Has() pour savoir si un élément est dans la liste
