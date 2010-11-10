@@ -61,7 +61,7 @@ PBXEXPORT LPCTSTR PBXCALL PBX_GetDescription()
 	_T("   subroutine insertafter(ulong index, any value)\n") \
 	_T("   function boolean hasnext()\n") \
 	_T("   function ulong position()\n") \
-	_T("   subroutine sort(powerobject apo_comparator)\n") \
+	_T("   subroutine sort(powerobject apo_comparator, string cmpfunc)\n") \
     _T("end class\n")
       /* Vector */
 	_T("class uo_vector from nonvisualobject\n") \
@@ -90,7 +90,7 @@ PBXEXPORT LPCTSTR PBXCALL PBX_GetDescription()
 	_T("   subroutine insertafter(ulong index, any value)\n") \
 	_T("   function boolean hasnext()\n") \
 	_T("   function ulong position()\n") \
-	_T("   subroutine sort(powerobject apo_comparator)\n") \
+	_T("   subroutine sort(powerobject apo_comparator, string cmpfunc)\n") \
     _T("end class\n")
 	};
 

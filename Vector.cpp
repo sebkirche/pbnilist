@@ -541,13 +541,15 @@ PBXRESULT Vector::Sort(PBCallInfo *ci)
 	pbobject pbCompObj;
 	pbclass pbCompClass;
 	pbmethodID pbCompMID;
+	pbstring pbCmpFunc;
+	LPCTSTR cmpFuncName;
 
-	if ( ci->pArgs->GetAt(0)->IsNull() || !ci->pArgs->GetAt(0)->IsObject()){
+	if ( ci->pArgs->GetAt(0)->IsNull() || !ci->pArgs->GetAt(0)->IsObject() || ci->pArgs->GetAt(1)->IsNull()){
 		pbxr = PBX_E_INVALID_ARGUMENT;
 	}
 	else{
 		pbCompObj = ci->pArgs->GetAt(0)->GetObjectW();
-		//check for object compliance : must implement the function int list_compare(any, any)
+		//check for object compliance : must implement the function int vector_compare(any, any)
 		pbCompClass = m_pSession->GetClass(pbCompObj);
 		if (!pbCompClass)
 			return PBX_E_INVALID_ARGUMENT;
@@ -556,8 +558,10 @@ PBXRESULT Vector::Sort(PBCallInfo *ci)
 		//LPCTSTR test = m_pSession->GetClassNameW(m_pbCompClass);
 		//m_pSession->ReleaseString(test);
 
-		pbCompMID = m_pSession->GetMethodID(pbCompClass, L"list_compare", PBRT_FUNCTION, L"IAA", false);
-		//m_pbCompMID = m_pSession->FindMatchingFunction(m_pbCompClass, L"list_compare", PBRT_FUNCTION, L"any, any");
+		pbCmpFunc = ci->pArgs->GetAt(1)->GetString();
+		cmpFuncName = m_pSession->GetString(pbCmpFunc);
+		pbCompMID = m_pSession->GetMethodID(pbCompClass, cmpFuncName, PBRT_FUNCTION, L"IAA", false);
+		//m_pbCompMID = m_pSession->FindMatchingFunction(m_pbCompClass, L"vector_compare", PBRT_FUNCTION, L"any, any");
 		if (pbCompMID == kUndefinedMethodID)
 			return PBX_E_INVALID_ARGUMENT;
 
