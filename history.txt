@@ -1,5 +1,9 @@
-HISTORY -=- Last edit Time-stamp: <01/05/2010 16:42 seki@bonemine>
+HISTORY -=- Last edit Time-stamp: <10/11/2010 11:27 Sebastien@PC-SEBASTIEN>
 =======
+
+2010-11-10 - added the comparison function name to sort() method arguments : now we can
+             use any comparison function, as long as its signature is "int func(any a, any b)"
+             the returned value is like for the classical strcmp() : -1 if a<b, 0 if a=b, 1 if a>b
 
 2010-05-01 - First public release
 
@@ -7,7 +11,7 @@ HISTORY -=- Last edit Time-stamp: <01/05/2010 16:42 seki@bonemine>
 
 2010-02-12 - added the vector implementation + benchmarks
 
-2010-02-2 - start of the project
+2010-02-02 - start of the project
 
 ;;----------------------------------------------------------------------------
 ;; Local Variables:
