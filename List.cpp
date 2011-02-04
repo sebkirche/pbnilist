@@ -543,6 +543,23 @@ bool ListComparator::operator()(IPB_Value *first, IPB_Value *second) const
 // SetCorrectPBValue : assign correct type to IPB_Value* from another IPB_Value*
 void SetCorrectPBValue(IPB_Value *dest, IPB_Value *src)
 {
+	if(src->IsNull()){
+		dest->SetToNull();
+		return;
+	}
+	if(src->IsEnum()){
+		dest->SetInt( src->GetInt() );
+		return;
+	}
+	if(src->IsArray()){
+		dest->SetArray( src->GetArray() );
+		return;
+	}
+	if(src->IsObject()){
+		dest->SetObject( src->GetObjectW() );
+		return;
+	}
+
 	switch(src->GetType()){
 		case pbvalue_any:
 			//objects, structs goes here ?
