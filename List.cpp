@@ -5,9 +5,9 @@
 #include "List.h"
 
 #ifdef _DEBUG
-#define	VERSION_STR	_T(" (Debug version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
+#define	VERSION_STR	_T(PBX_VERSION) _T(" (Debug version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
 #else
-#define	VERSION_STR	_T(" (Release version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
+#define	VERSION_STR	_T(PBX_VERSION) _T(" (Release version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
 #endif
 
 // default constructor
@@ -34,8 +34,8 @@ PBXRESULT List::Invoke(IPB_Session *session, pbobject obj, pbmethodID mid, PBCal
 
 	switch ( mid )
 	{
-		case mid_Hello:
-			pbxr = this->Hello( ci );
+	case mid_GetVersion:
+			pbxr = this->GetVersion( ci );
 			break;
 		case mid_Size:
 			pbxr = this->Size(ci);
@@ -120,12 +120,12 @@ void List::Destroy()
 }
 
 // Method callable from PowerBuilder
-PBXRESULT List::Hello( PBCallInfo * ci )
+PBXRESULT List::GetVersion( PBCallInfo * ci )
 {
 	PBXRESULT	pbxr = PBX_OK;
 
 	// return value
-	ci->returnValue->SetString( _T("Hello from List") VERSION_STR );
+	ci->returnValue->SetString( VERSION_STR );
 
 	return pbxr;
 }
@@ -562,7 +562,7 @@ void SetCorrectPBValue(IPB_Value *dest, IPB_Value *src)
 
 	switch(src->GetType()){
 		case pbvalue_any:
-			//objects, structs goes here ?
+			//objects, structs goes here ? NO !!!
 			break;
 		case pbvalue_blob:
 			dest->SetBlob(src->GetBlob());

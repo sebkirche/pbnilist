@@ -6,9 +6,9 @@
 #include <algorithm>
 
 #ifdef _DEBUG
-#define	VERSION_STR	_T(" (Debug version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
+#define	VERSION_STR	_T(PBX_VERSION) _T(" (Debug version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
 #else
-#define	VERSION_STR	_T(" (Release version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
+#define	VERSION_STR	_T(PBX_VERSION) _T(" (Release version - ") _T(__DATE__) _T(" ") _T(__TIME__) _T(")")
 #endif
 
 // default constructor
@@ -41,8 +41,8 @@ PBXRESULT Vector::Invoke
 
 	switch ( mid )
 	{
-		case mid_Hello:
-			pbxr = this->Hello( ci );
+		case mid_GetVersion:
+			pbxr = this->GetVersion( ci );
 			break;
 		case mid_Size:
 			pbxr = this->Size(ci);
@@ -133,12 +133,12 @@ void Vector::Destroy()
 }
 
 // Method callable from PowerBuilder
-PBXRESULT Vector::Hello( PBCallInfo * ci )
+PBXRESULT Vector::GetVersion( PBCallInfo * ci )
 {
 	PBXRESULT	pbxr = PBX_OK;
 
 	// return value
-	ci->returnValue->SetString( _T("Hello from Vector") VERSION_STR );
+	ci->returnValue->SetString( VERSION_STR );
 
 	return pbxr;
 }
@@ -578,7 +578,7 @@ bool VectorComparator::operator()(IPB_Value *first, IPB_Value *second) const
 
 	SetCorrectPBValue(comp_ci.pArgs->GetAt(0), first);
 	SetCorrectPBValue(comp_ci.pArgs->GetAt(1), second);
-	
+
 	m_pSession->InvokeObjectFunction(m_pbCompObj, m_pbCompMID, &comp_ci);
 
 	if (m_pSession->HasExceptionThrown())

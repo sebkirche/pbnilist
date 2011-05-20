@@ -38,7 +38,7 @@ PBXEXPORT LPCTSTR PBXCALL PBX_GetDescription()
    static const TCHAR classDesc[] = {
       /* List */
 	_T("class uo_list from nonvisualobject\n") \
-    _T("   function string hello()\n") \
+    _T("   function string getversion()\n") \
 	_T("   function ulong size()\n") \
 	_T("   function ulong maxsize()\n") \
 	_T("   subroutine purge()\n") \
@@ -65,7 +65,7 @@ PBXEXPORT LPCTSTR PBXCALL PBX_GetDescription()
     _T("end class\n")
       /* Vector */
 	_T("class uo_vector from nonvisualobject\n") \
-    _T("   function string hello()\n") \
+    _T("   function string getversion()\n") \
 	_T("   function ulong size()\n") \
 	_T("   function ulong maxsize()\n") \
 	_T("   function boolean reserve(ulong size)\n") \

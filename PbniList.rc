@@ -1,15 +1,8 @@
 // Microsoft Visual C++ generated resource script.
 //
 
-#define APSTUDIO_READONLY_SYMBOLS
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 2 resource.
-//
-#include "afxres.h"
+#include "main.h"
 
-/////////////////////////////////////////////////////////////////////////////
-#undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
@@ -40,8 +33,8 @@ LANGUAGE LANG_FRENCH, SUBLANG_FRENCH_LUXEMBOURG
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,3,0,0
- PRODUCTVERSION 0,3,0,0
+ FILEVERSION PBX_VERSION_RC
+ PRODUCTVERSION PBX_VERSION_RC
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -63,12 +56,12 @@ BEGIN
 #else
 			""
 #endif
-            VALUE "FileVersion", "0.3"
+            VALUE "FileVersion", PBX_VERSION
             VALUE "InternalName", "PbniList"
-            VALUE "LegalCopyright", "Copyright © 2010 Sébastien Kirche"
+            VALUE "LegalCopyright", "Copyright © 2010,2011 Sébastien Kirche & Nicolas Georges"
             VALUE "OriginalFilename", "PbniList.pbx"
             VALUE "ProductName", "PbniList Powerbuilder Extension"
-            VALUE "ProductVersion", "0.3"
+            VALUE "ProductVersion", PBX_VERSION
         END
     END
     BLOCK "VarFileInfo"

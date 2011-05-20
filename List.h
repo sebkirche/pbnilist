@@ -29,7 +29,7 @@ public:
 	// PowerBuilder method wrappers
 	enum Function_Entrys
 	{
-		mid_Hello = 0,
+		mid_GetVersion = 0,
 		mid_Size,
 		mid_MaxSize,
 		mid_Purge,
@@ -59,7 +59,7 @@ public:
 
 protected:
  	// methods callable from PowerBuilder
-	PBXRESULT Hello( PBCallInfo * ci );
+	PBXRESULT GetVersion( PBCallInfo * ci );
 	PBXRESULT Size(PBCallInfo * ci);
 	PBXRESULT MaxSize(PBCallInfo * ci);
 	PBXRESULT Purge(PBCallInfo * ci);

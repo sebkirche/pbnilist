@@ -10,8 +10,13 @@
 
 // Insert your headers here
 #include <windows.h>
+
+#define PBX_VERSION "0.4.1"
+#define PBX_VERSION_RC 0,4,1,0
+
+#ifndef RC_INVOKED
 #include <pbext.h>
 
 extern void SetCorrectPBValue(IPB_Value *dest, IPB_Value *src);
-
+#endif //RC_INVOKED
 #endif // !defined(MAIN_H)
