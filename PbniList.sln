@@ -9,14 +9,38 @@ Global
 		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Win32 = Debug|Win32
-		Release|Win32 = Release|Win32
+		Debug 09|Win32 = Debug 09|Win32
+		Debug 10.0|Win32 = Debug 10.0|Win32
+		Debug 10.5|Win32 = Debug 10.5|Win32
+		Debug 11.0|Win32 = Debug 11.0|Win32
+		Debug 11.5|Win32 = Debug 11.5|Win32
+		Release 09|Win32 = Release 09|Win32
+		Release 10.0|Win32 = Release 10.0|Win32
+		Release 10.5|Win32 = Release 10.5|Win32
+		Release 11.0|Win32 = Release 11.0|Win32
+		Release 11.5|Win32 = Release 11.5|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug|Win32.Build.0 = Debug|Win32
-		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release|Win32.ActiveCfg = Release|Win32
-		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release|Win32.Build.0 = Release|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 09|Win32.ActiveCfg = Debug 09|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 09|Win32.Build.0 = Debug 09|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 10.0|Win32.ActiveCfg = Debug 10.0|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 10.0|Win32.Build.0 = Debug 10.0|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 10.5|Win32.ActiveCfg = Debug 10.5|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 10.5|Win32.Build.0 = Debug 10.5|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 11.0|Win32.ActiveCfg = Debug 11.0|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 11.0|Win32.Build.0 = Debug 11.0|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 11.5|Win32.ActiveCfg = Debug 11.5|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Debug 11.5|Win32.Build.0 = Debug 11.5|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 09|Win32.ActiveCfg = Release 09|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 09|Win32.Build.0 = Release 09|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 10.0|Win32.ActiveCfg = Release 10.0|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 10.0|Win32.Build.0 = Release 10.0|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 10.5|Win32.ActiveCfg = Release 10.5|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 10.5|Win32.Build.0 = Release 10.5|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 11.0|Win32.ActiveCfg = Release 11.0|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 11.0|Win32.Build.0 = Release 11.0|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 11.5|Win32.ActiveCfg = Release 11.5|Win32
+		{33C1C843-57F6-4411-ABA9-58612B39F11F}.Release 11.5|Win32.Build.0 = Release 11.5|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
