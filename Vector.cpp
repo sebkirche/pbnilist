@@ -548,7 +548,11 @@ PBXRESULT Vector::Sort(PBCallInfo *ci)
 		pbxr = PBX_E_INVALID_ARGUMENT;
 	}
 	else{
+#ifdef PB9
+		pbCompObj = ci->pArgs->GetAt(0)->GetObjectA();
+#else
 		pbCompObj = ci->pArgs->GetAt(0)->GetObjectW();
+#endif
 		//check for object compliance : must implement the function int vector_compare(any, any)
 		pbCompClass = m_pSession->GetClass(pbCompObj);
 		if (!pbCompClass)
@@ -560,7 +564,7 @@ PBXRESULT Vector::Sort(PBCallInfo *ci)
 
 		pbCmpFunc = ci->pArgs->GetAt(1)->GetString();
 		cmpFuncName = m_pSession->GetString(pbCmpFunc);
-		pbCompMID = m_pSession->GetMethodID(pbCompClass, cmpFuncName, PBRT_FUNCTION, L"IAA", false);
+		pbCompMID = m_pSession->GetMethodID(pbCompClass, cmpFuncName, PBRT_FUNCTION, STR("IAA"), false);
 		//m_pbCompMID = m_pSession->FindMatchingFunction(m_pbCompClass, L"vector_compare", PBRT_FUNCTION, L"any, any");
 		if (pbCompMID == kUndefinedMethodID)
 			return PBX_E_INVALID_ARGUMENT;

@@ -1,0 +1,25 @@
+$PBExportHeader$listdemo.srj
+EXE:listdemo90.exe,,0,0
+CMP:0,0,0,2,0,0
+COM:Conceptware
+DES:
+CPY:
+PRD:demo de l'extension pbnilist
+PVS:1.0.0.2
+PVN:1,0,0,2
+FVS:1.0.0.2
+FVN:1,0,0,2
+PBD:C:\Dev\pb\CW\PbniList\listdemo90.pbl,,0
+PBD:C:\Dev\pb\CW\PbniList\pbniregex90.pbd,,0
+PBD:C:\Dev\pb\CW\PbniList\pbnilist90.pbd,,0
+OBJ:c:\dev\pb\cw\pbnilist\listdemo90.pbl,debug_message,f
+OBJ:c:\dev\pb\cw\pbnilist\listdemo90.pbl,anyiterator,u
+OBJ:c:\dev\pb\cw\pbnilist\listdemo90.pbl,anyiterator_factory,f
+OBJ:c:\dev\pb\cw\pbnilist\listdemo90.pbl,w_test,w
+OBJ:c:\dev\pb\cw\pbnilist\pbnilist90.pbd,uo_list,u
+OBJ:c:\dev\pb\cw\pbnilist\listdemo90.pbl,nv_benchmark,u
+OBJ:c:\dev\pb\cw\pbnilist\listdemo90.pbl,split_to_array_of_longs,f
+OBJ:C:\Dev\pb\CW\PbniList\listdemo90.pbl,listdemo90,a
+OBJ:C:\Dev\pb\CW\PbniList\pbniregex90.pbd,fastreplaceall,f
+OBJ:c:\dev\pb\cw\pbnilist\listdemo90.pbl,listdemo90,a
+OBJ:c:\dev\pb\cw\pbnilist\pbnilist90.pbd,uo_vector,u

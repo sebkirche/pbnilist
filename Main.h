@@ -14,6 +14,12 @@
 #define PBX_VERSION "0.4.1"
 #define PBX_VERSION_RC 0,4,1,0
 
+#ifdef PB9
+#define STR(x) x
+#else
+#define STR(x) _T(x)
+#endif
+
 #ifndef RC_INVOKED
 #include <pbext.h>
 

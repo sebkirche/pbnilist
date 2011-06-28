@@ -1,0 +1,34 @@
+HA$PBExportHeader$split_to_array_of_longs.srf
+global type split_to_array_of_longs from function_object
+end type
+
+forward prototypes
+global function boolean split_to_array_of_longs (string as_string, string as_separator, ref long al_array[])
+end prototypes
+
+global function boolean split_to_array_of_longs (string as_string, string as_separator, ref long al_array[]);long d_pos, f_pos, seplength
+long vide[]
+seplength = len( as_separator )
+al_array = vide
+
+if isnull(as_string) or as_string = "" then 
+	return false
+end if
+
+d_pos = 1
+f_pos = pos(as_string,as_separator)
+if f_pos = 0 then 
+	al_array[ upperbound(al_array) + 1 ] = long(as_string)
+else
+	do
+		al_array[ upperbound(al_array) + 1 ] = long(mid( as_string, d_pos, f_pos - d_pos))
+		d_pos = f_pos + seplength
+		f_pos = pos(as_string,as_separator,d_pos)
+	loop while f_pos > 0
+	al_array[ upperbound(al_array) + 1 ] = long(mid( as_string, d_pos))
+end if
+
+return true
+
+end function
+

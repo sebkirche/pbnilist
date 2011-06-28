@@ -499,7 +499,11 @@ PBXRESULT List::Sort(PBCallInfo *ci)
 		pbxr = PBX_E_INVALID_ARGUMENT;
 	}
 	else{
+#ifdef PB9
+		pbCompObj = ci->pArgs->GetAt(0)->GetObjectA();
+#else
 		pbCompObj = ci->pArgs->GetAt(0)->GetObjectW();
+#endif
 		//check for object compliance : must implement the function int list_compare(any, any)
 		pbCompClass = m_pSession->GetClass(pbCompObj);
 		if (!pbCompClass)
@@ -511,7 +515,7 @@ PBXRESULT List::Sort(PBCallInfo *ci)
 
 		pbCmpFunc = ci->pArgs->GetAt(1)->GetString();
 		cmpFuncName = m_pSession->GetString(pbCmpFunc);
-		pbCompMID = m_pSession->GetMethodID(pbCompClass, cmpFuncName, PBRT_FUNCTION, L"IAA", false);
+		pbCompMID = m_pSession->GetMethodID(pbCompClass, cmpFuncName, PBRT_FUNCTION, STR("IAA"), false);
 		//m_pbCompMID = m_pSession->FindMatchingFunction(m_pbCompClass, L"list_compare", PBRT_FUNCTION, L"any, any");
 		if (pbCompMID == kUndefinedMethodID)
 			return PBX_E_INVALID_ARGUMENT;
@@ -556,7 +560,11 @@ void SetCorrectPBValue(IPB_Value *dest, IPB_Value *src)
 		return;
 	}
 	if(src->IsObject()){
+#ifdef PB9
+		dest->SetObject( src->GetObjectA() );
+#else
 		dest->SetObject( src->GetObjectW() );
+#endif
 		return;
 	}
 
@@ -570,9 +578,11 @@ void SetCorrectPBValue(IPB_Value *dest, IPB_Value *src)
 		case pbvalue_boolean:
 			dest->SetBool(src->GetBool());
 			break;
+#ifdef HAS_BYTE
 		case pbvalue_byte:
 			dest->SetByte(src->GetByte());
 			break;
+#endif
 		case pbvalue_char:
 			dest->SetChar(src->GetChar());
 			break;

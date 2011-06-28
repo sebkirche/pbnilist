@@ -1,0 +1,16 @@
+$PBExportHeader$debug_message.srf
+global type debug_message from function_object
+end type
+
+forward prototypes
+global function integer debug_message (string as_title, string as_message)
+end prototypes
+
+global function integer debug_message (string as_title, string as_message);
+string ls_tmp
+ls_tmp = "["+ as_title + "]~t" + as_message
+OutputDebugString( ls_tmp )
+
+return 1
+end function
+

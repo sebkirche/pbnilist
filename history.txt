@@ -1,7 +1,10 @@
-HISTORY -=- Last edit Time-stamp: <10/11/2010 11:27 Sebastien@PC-SEBASTIEN>
+HISTORY -=- Last edit Time-stamp: <28/06/2011 16:22 Sebastien@PC-SEBASTIEN>
 =======
-2011-02-04 - patch SetCorrectPBValue method to allow Object, Enum, Array and null values.
-			(geni)
+
+2011-06-28 - Backported the extension and the dmo application to PB9,10,10.5
+
+2011-02-04 - patch SetCorrectPBValue method to allow Object, Enum, Array and null values
+            (geni)
 
 2010-11-10 - added the comparison function name to sort() method arguments : now we can
              use any comparison function, as long as its signature is "int func(any a, any b)"
