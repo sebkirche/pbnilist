@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="PbniList"
 	ProjectGUID="{33C1C843-57F6-4411-ABA9-58612B39F11F}"
 	RootNamespace="PbniList"
@@ -900,7 +900,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\history.txt"
+			RelativePath=".\history_pbnilist.txt"
 			>
 		</File>
 		<File
