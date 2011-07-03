@@ -1,7 +1,7 @@
-HISTORY -=- Last edit Time-stamp: <28/06/2011 16:22 Sebastien@PC-SEBASTIEN>
+HISTORY -=- Last edit Time-stamp: <03/07/2011 12:43 Sebastien@PC-DEV>
 =======
 
-2011-06-28 - Backported the extension and the dmo application to PB9,10,10.5
+2011-06-28 - Backported the extension and the demo application to PB9,10,10.5
 
 2011-02-04 - patch SetCorrectPBValue method to allow Object, Enum, Array and null values
             (geni)
