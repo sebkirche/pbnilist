@@ -1,5 +1,7 @@
-HISTORY -=- Last edit Time-stamp: <03/07/2011 12:43 Sebastien@PC-DEV>
+HISTORY -=- Last edit Time-stamp: <03/07/2011 13:13 Sebastien@PC-DEV>
 =======
+
+2011-07-03 - added a script to help the packaging and distrbution
 
 2011-06-28 - Backported the extension and the demo application to PB9,10,10.5
 
