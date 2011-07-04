@@ -1,5 +1,7 @@
-HISTORY -=- Last edit Time-stamp: <03/07/2011 13:13 Sebastien@PC-DEV>
+HISTORY -=- Last edit Time-stamp: <04/07/2011 20:37 Sebastien@PC-DEV>
 =======
+
+2001-07-04 - Added the PB12 version
 
 2011-07-03 - added a script to help the packaging and distrbution
 
