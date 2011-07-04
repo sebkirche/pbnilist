@@ -19,7 +19,6 @@ pbniregex*.pbx
 worksp*.pbw
 listdemo*.pbl
 listdemo*.pbt
-listdemo.ini
 listdemo.pbr
 listdemo*.exe
 
