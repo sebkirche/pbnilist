@@ -499,7 +499,7 @@ PBXRESULT List::Sort(PBCallInfo *ci)
 		pbxr = PBX_E_INVALID_ARGUMENT;
 	}
 	else{
-#ifdef PB9
+#if defined (PBVER) && (PBVER < 100)
 		pbCompObj = ci->pArgs->GetAt(0)->GetObjectA();
 #else
 		pbCompObj = ci->pArgs->GetAt(0)->GetObjectW();
@@ -560,7 +560,7 @@ void SetCorrectPBValue(IPB_Value *dest, IPB_Value *src)
 		return;
 	}
 	if(src->IsObject()){
-#ifdef PB9
+#if defined (PBVER) && (PBVER < 100)
 		dest->SetObject( src->GetObjectA() );
 #else
 		dest->SetObject( src->GetObjectW() );
@@ -578,7 +578,7 @@ void SetCorrectPBValue(IPB_Value *dest, IPB_Value *src)
 		case pbvalue_boolean:
 			dest->SetBool(src->GetBool());
 			break;
-#ifdef HAS_BYTE
+#if defined (PBVER) && (PBVER >= 105)
 		case pbvalue_byte:
 			dest->SetByte(src->GetByte());
 			break;
