@@ -1,6 +1,8 @@
 HISTORY -=- Last edit Time-stamp: <04/07/2011 20:44 Sebastien@PC-DEV>
 =======
 
+2015-03-26 - renamed insert() to inserthere()
+
 2011-07-04 - Added the PB12 version
 
 2011-07-03 - added a script to help the packaging and distribution

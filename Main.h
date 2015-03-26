@@ -1,7 +1,6 @@
 // PbniHash.h : include file for standard system include files,
 //  or project specific include files that are used frequently,
 //  are changed infrequently
-//
 
 #ifndef MAIN_H
 #define MAIN_H
@@ -11,8 +10,8 @@
 // Insert your headers here
 #include <windows.h>
 
-#define PBX_VERSION "0.4.1"
-#define PBX_VERSION_RC 0,4,1,0
+#define PBX_VERSION "0.4.2"
+#define PBX_VERSION_RC 0,4,2,0
 
 #ifdef PB9
 #define STR(x) x

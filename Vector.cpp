@@ -101,8 +101,8 @@ PBXRESULT Vector::Invoke
 		case mid_Prepend:
 			pbxr = this->Prepend(ci);
 			break;
-		case mid_Insert:
-			pbxr = this->Insert(ci);
+		case mid_InsertHere:
+			pbxr = this->InsertHere(ci);
 			break;
 		case mid_InsertBefore:
 			pbxr = this->InsertBefore(ci);
@@ -177,7 +177,7 @@ PBXRESULT Vector::Prepend( PBCallInfo * ci )
 }
 
 //Insert some data at the current cursor position PERFORMANCE WARNING !!!
-PBXRESULT Vector::Insert( PBCallInfo * ci )
+PBXRESULT Vector::InsertHere( PBCallInfo * ci )
 {
 	PBXRESULT	pbxr = PBX_OK;
 	bool bFirstAdd;

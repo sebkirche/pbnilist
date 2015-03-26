@@ -56,7 +56,7 @@ PBXEXPORT LPCTSTR PBXCALL PBX_GetDescription()
 	_T("   function any getfirst()\n") \
 	_T("   function any getlast()\n") \
 	_T("   subroutine prepend(any value)\n") \
-	_T("   subroutine insert(any value)\n") \
+	_T("   subroutine inserthere(any value)\n") \
 	_T("   subroutine insertbefore(ulong index, any value)\n") \
 	_T("   subroutine insertafter(ulong index, any value)\n") \
 	_T("   function boolean hasnext()\n") \
@@ -85,7 +85,7 @@ PBXEXPORT LPCTSTR PBXCALL PBX_GetDescription()
 	_T("   function any getfirst()\n") \
 	_T("   function any getlast()\n") \
 	_T("   subroutine prepend(any value)\n") \
-	_T("   subroutine insert(any value)\n") \
+	_T("   subroutine inserthere(any value)\n") \
 	_T("   subroutine insertbefore(ulong index, any value)\n") \
 	_T("   subroutine insertafter(ulong index, any value)\n") \
 	_T("   function boolean hasnext()\n") \

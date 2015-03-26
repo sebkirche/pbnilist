@@ -47,7 +47,7 @@ public:
 		mid_GetFirst,
 		mid_GetLast,
 		mid_Prepend,
-		mid_Insert,
+		mid_InsertHere,
 		mid_InsertBefore,
 		mid_InsertAfter,
 		mid_HasNext,
@@ -78,7 +78,7 @@ protected:
 	PBXRESULT GetFirst(PBCallInfo * ci);
 	PBXRESULT GetLast(PBCallInfo * ci);
 	PBXRESULT Prepend(PBCallInfo * ci);
-	PBXRESULT Insert(PBCallInfo * ci);
+	PBXRESULT InsertHere(PBCallInfo * ci);
 	PBXRESULT InsertBefore(PBCallInfo * ci);
 	PBXRESULT InsertAfter(PBCallInfo * ci);
 	PBXRESULT HasNext(PBCallInfo * ci);

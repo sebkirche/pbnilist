@@ -4,3 +4,5 @@ Save Format v3.0(19990112)
 @begin Targets
  0 "listdemo105.pbt";
 @end;
+DefaultTarget "listdemo105.pbt";
+DefaultRemoteTarget "listdemo105.pbt";

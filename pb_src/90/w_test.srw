@@ -1396,7 +1396,7 @@ string text = "insert"
 end type
 
 event clicked;
-list.insert(get_data() )
+list.inserthere(get_data() )
 
 list_data( )
 
@@ -2211,7 +2211,7 @@ string text = "insert"
 end type
 
 event clicked;
-vector.insert(get_data( ))
+vector.inserthere(get_data( ))
 
 list_data( )
 

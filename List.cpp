@@ -88,8 +88,8 @@ PBXRESULT List::Invoke(IPB_Session *session, pbobject obj, pbmethodID mid, PBCal
 		case mid_Prepend:
 			pbxr = this->Prepend(ci);
 			break;
-		case mid_Insert:
-			pbxr = this->Insert(ci);
+		case mid_InsertHere:
+			pbxr = this->InsertHere(ci);
 			break;
 		case mid_InsertBefore:
 			pbxr = this->InsertBefore(ci);
@@ -159,7 +159,7 @@ PBXRESULT List::Prepend( PBCallInfo * ci )
 }
 
 //Insert some data at the current cursor position
-PBXRESULT List::Insert( PBCallInfo * ci )
+PBXRESULT List::InsertHere( PBCallInfo * ci )
 {
 	PBXRESULT	pbxr = PBX_OK;
 	bool bFirstAdd;
