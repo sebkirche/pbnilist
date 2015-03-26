@@ -8,8 +8,8 @@ Both list and vector have a built-in iterator for easy crawling and
 both allow addition of items at the begining, end or at any position.
 
 You can also sort the list and vector by providing a comparator object
-to the sort() method. The given method is called at the object, 
-its prototype must be function integer name_of_method (any a, any b).
+to the `sort()` method. The given method is called at the object, 
+its prototype must be `function integer name_of_method (any a, any b)`.
 The method must return -1, 0 or 1 depending on the comparison of the given values.
 
 This is free code, released under the MIT license with the hope that
