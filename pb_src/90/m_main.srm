@@ -1,0 +1,146 @@
+$PBExportHeader$m_main.srm
+forward
+global type m_main from menu
+end type
+type m_file from menu within m_main
+end type
+type m_quit from menu within m_file
+end type
+type m_file from menu within m_main
+m_quit m_quit
+end type
+type m_help from menu within m_main
+end type
+type m_showtooltips from menu within m_help
+end type
+type m_about from menu within m_help
+end type
+type m_help from menu within m_main
+m_showtooltips m_showtooltips
+m_about m_about
+end type
+global type m_main from menu
+m_file m_file
+m_help m_help
+end type
+end forward
+
+global type m_main from menu
+m_file m_file
+m_help m_help
+end type
+global m_main m_main
+
+on m_main.create
+m_main=this
+call super::create
+this.text = "m_main"
+this.m_file=create m_file
+this.m_help=create m_help
+this.Item[UpperBound(this.Item)+1]=this.m_file
+this.Item[UpperBound(this.Item)+1]=this.m_help
+end on
+
+on m_main.destroy
+call super::destroy
+destroy(this.m_file)
+destroy(this.m_help)
+end on
+
+type m_file from menu within m_main
+m_quit m_quit
+end type
+
+on m_file.create
+call super::create
+this.text = "File"
+this.m_quit=create m_quit
+this.Item[UpperBound(this.Item)+1]=this.m_quit
+end on
+
+on m_file.destroy
+call super::destroy
+destroy(this.m_quit)
+end on
+
+type m_quit from menu within m_file
+end type
+
+event clicked;close(w_test)
+end event
+
+on m_quit.create
+call super::create
+this.text = "Quit"
+end on
+
+on m_quit.destroy
+call super::destroy
+end on
+
+type m_help from menu within m_main
+m_showtooltips m_showtooltips
+m_about m_about
+end type
+
+on m_help.create
+call super::create
+this.text = "Help"
+this.m_showtooltips=create m_showtooltips
+this.m_about=create m_about
+this.Item[UpperBound(this.Item)+1]=this.m_showtooltips
+this.Item[UpperBound(this.Item)+1]=this.m_about
+end on
+
+on m_help.destroy
+call super::destroy
+destroy(this.m_showtooltips)
+destroy(this.m_about)
+end on
+
+type m_showtooltips from menu within m_help
+end type
+
+event clicked;
+boolean lb_checked
+
+lb_checked = this.checked
+lb_checked = not lb_checked
+
+if lb_checked then
+	w_test.of_addtips()
+else
+	w_test.of_removetips()
+end if
+
+this.checked = lb_checked
+
+end event
+
+on m_showtooltips.create
+call super::create
+this.text = "Show tooltips"
+this.checked = true
+end on
+
+on m_showtooltips.destroy
+call super::destroy
+end on
+
+type m_about from menu within m_help
+end type
+
+event clicked;messagebox("List demo", "A uo_list and uo_vector testing tool for PbniList~r~n~r~n" + &
+							"by Sébastien Kirche.")
+
+end event
+
+on m_about.create
+call super::create
+this.text = "About"
+end on
+
+on m_about.destroy
+call super::destroy
+end on
+

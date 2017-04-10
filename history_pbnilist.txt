@@ -1,5 +1,8 @@
-HISTORY -=- Last edit Time-stamp: <04/07/2011 20:44 Sebastien@PC-DEV>
+HISTORY -=- Last edit Time-stamp: <31/03/2017 14:04 seki@bonemine.seki.fr>
 =======
+
+2017-03-31 - version 0.4.3 (copyright update)
+           - Added the demo application for PB125 
 
 2017-01-25 - fixed the settings for the PB12 version
            - Added the PB125 and PB126 pbx

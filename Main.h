@@ -10,8 +10,8 @@
 // Insert your headers here
 #include <windows.h>
 
-#define PBX_VERSION "0.4.2"
-#define PBX_VERSION_RC 0,4,2,0
+#define PBX_VERSION "0.4.3"
+#define PBX_VERSION_RC 0,4,3,0
 
 #ifdef PB9
 #define STR(x) x

@@ -20,3 +20,13 @@ Remarks, comments, questions and bug reports are welcome : drop me a
 message at sebastien.kirche@free.fr
 
 Please also drop me a note if you use that extension.
+
+## How to configure Visual Studio to debug the lib
+
+Note: the actual setting is store in your PbniList.vcproj.<company>.<username>.user file
+
+For a given combination of debug/release and PB version, go to the project properties / Debugging, example provided for PB12.5
+- Command = C:\Program Files\Sybase\PowerBuilder 12.5\PB125.EXE
+- Command arguments = /workspace worksp125.pbw
+- Working directory = $(ProjectDir)
+- Attach = no

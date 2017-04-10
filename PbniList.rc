@@ -58,7 +58,7 @@ BEGIN
 #endif
             VALUE "FileVersion", PBX_VERSION
             VALUE "InternalName", "PbniList"
-            VALUE "LegalCopyright", "Copyright © 2010,2011 Sébastien Kirche & Nicolas Georges"
+            VALUE "LegalCopyright", "Copyright © 2010,2011,2015,2017 Sébastien Kirche & Nicolas Georges"
             VALUE "OriginalFilename", "PbniList.pbx"
             VALUE "ProductName", "PbniList Powerbuilder Extension"
             VALUE "ProductVersion", PBX_VERSION

@@ -22,7 +22,7 @@ listdemo*.pbt
 listdemo.pbr
 listdemo*.exe
 
-readme.txt
+readme.md
 help-en.txt
 history_pbnilist.txt
 license.txt

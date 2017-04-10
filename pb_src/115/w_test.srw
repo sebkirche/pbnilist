@@ -1,4 +1,4 @@
-HA$PBExportHeader$w_test.srw
+﻿$PBExportHeader$w_test.srw
 forward
 global type w_test from window
 end type
@@ -76,6 +76,8 @@ type st_time from statictext within tabpage_list
 end type
 type gb_1 from groupbox within tabpage_list
 end type
+type gb_3 from groupbox within tabpage_list
+end type
 type tabpage_list from userobject within tab_1
 ddlb_sort_datatype ddlb_sort_datatype
 st_3 st_3
@@ -112,6 +114,7 @@ st_x st_x
 cb_bench cb_bench
 st_time st_time
 gb_1 gb_1
+gb_3 gb_3
 end type
 type tabpage_vector from userobject within tab_1
 end type
@@ -187,6 +190,8 @@ type sle_data_v from singlelineedit within tabpage_vector
 end type
 type gb_2 from groupbox within tabpage_vector
 end type
+type gb_index from groupbox within tabpage_vector
+end type
 type tabpage_vector from userobject within tab_1
 ddlb_sort_datatype_vect ddlb_sort_datatype_vect
 st_4 st_4
@@ -224,6 +229,7 @@ cb_prepend_v cb_prepend_v
 st_1 st_1
 sle_data_v sle_data_v
 gb_2 gb_2
+gb_index gb_index
 end type
 type tab_1 from tab within w_test
 tabpage_list tabpage_list
@@ -236,6 +242,7 @@ integer width = 3090
 integer height = 1772
 boolean titlebar = true
 string title = "PBNI ListTest"
+string menuname = "m_main"
 boolean controlmenu = true
 boolean minbox = true
 boolean maxbox = true
@@ -259,6 +266,7 @@ uo_vector vector
 string is_keys[]
 
 string is_loops = "10|100|1000|5000|10000|50000|100000|250000|500000|750000|1000000"
+n_tooltip i_actTip
 
 end variables
 
@@ -269,12 +277,18 @@ public function integer cmplist (any aa_one, any aa_two)
 public function integer cmpvector (any aa_one, any aa_two)
 public function any get_data ()
 public function string tostring (any aa_val)
+public subroutine of_addtips ()
+public subroutine of_removetips ()
+public function string of_get_tag (powerobject apo_obj)
+public function string of_datatypeof (powerobject apo_object)
+public subroutine show_data (any aa_val, singlelineedit a_sle, dropdownlistbox a_ddlb)
 end prototypes
 
 public subroutine list_data ();////string keys[]
 int i, size
 long ll_pos
 string ls_val
+any item
 
 choose case tab_1.selectedtab
 	case 1
@@ -284,7 +298,9 @@ choose case tab_1.selectedtab
 		
 		tab_1.tabpage_list.lb_values.reset()
 		for i = 1 to size
-			ls_val = tostring(list.getat(i))				
+			item = list.getat(i)
+			ls_val = tostring(item)
+			ls_val = ls_val + ' [' + classname(item) + ']'
 			if i = ll_pos then
 				ls_val = "->"+ls_val
 			else
@@ -294,6 +310,7 @@ choose case tab_1.selectedtab
 		next
 		
 		tab_1.tabpage_list.cbx_hasnext.checked = list.hasnext()
+		
 	case 2
 		size = vector.size()
 		ll_pos = vector.position( )
@@ -301,7 +318,9 @@ choose case tab_1.selectedtab
 		
 		tab_1.tabpage_vector.lb_values_v.reset()
 		for i = 1 to size
-			ls_val = tostring( vector.getat(i) )
+			item = vector.getat(i)
+			ls_val = tostring( item )
+			ls_val = ls_val + ' [' + classname(item) + ']'
 			if i = ll_pos then
 				ls_val = "->"+ls_val
 			else
@@ -311,7 +330,9 @@ choose case tab_1.selectedtab
 		next
 		
 		tab_1.tabpage_vector.cbx_hasnext_v.checked = vector.hasnext()
+		
 end choose
+
 end subroutine
 
 public function window thiswindow ();return this
@@ -400,9 +421,7 @@ return ret
 
 end function
 
-public function any get_data ();//	Vraiment, Elle fait $$HEX3$$e700e0002000$$ENDHEX$$la tienne ?
-//Ou encore:
-//	-> Pourquoi Annie a-t-elle une r$$HEX1$$e900$$ENDHEX$$putation de cochonne ???
+public function any get_data ();
 any la_val	
 string ls_datatype, ls_val
 
@@ -443,16 +462,90 @@ end choose
 return la_val
 end function
 
-public function string tostring (any aa_val);//cast an any to a readable string
+public function string tostring (any aa_val);
+//cast an any to a readable string
+
 if isnull( aa_val ) then return "<null>"
+
 choose case classname( aa_val )
 	case "string", "integer", "int", "unsigned integer", "uint", "date", "datetime", "time", "decimal", &
 			"double", "real","long", "unsigned long", "ulong"
 		return string( aa_val )
 end choose
+
 return classname( aa_val )
 		
 end function
+
+public subroutine of_addtips ();
+
+//i_actTip.of_SetTipTitle(i_actTip.TTI_INFO, "PCRE pattern option")
+
+int i, p
+string ls_tag
+powerobject item
+for i = 1 to upperbound(tab_1.tabpage_list.control[])
+	item = tab_1.tabpage_list.control[i]
+	ls_tag = of_get_tag( item )
+	p = pos(ls_tag, "TT:")
+	if p > 0 then
+		i_actTip.of_addtool( item, mid(ls_tag, p + 3), i_actTip.TTF_SUBCLASS)
+	end if
+next
+
+end subroutine
+
+public subroutine of_removetips ();
+i_actTip.of_removealltools( )
+end subroutine
+
+public function string of_get_tag (powerobject apo_obj);//return the tag value of the currenct object
+string ls_tag
+choose case of_datatypeof( apo_obj )
+	case "window"
+		window l_window
+		l_window = apo_obj
+		ls_tag = l_window.tag			
+	case "dragobject"
+		dragobject l_object
+		l_object = apo_obj
+		ls_tag = l_object.tag
+	case "roundrectangle"
+		roundrectangle l_rr
+		l_rr = apo_obj
+		ls_tag = l_rr.tag		
+	case else
+		debug_message( classname(), "of_get_tag :  type not handled = " + of_datatypeof( apo_obj ) )
+end choose
+
+return ls_tag
+
+end function
+
+public function string of_datatypeof (powerobject apo_object);classdefinition lcd_classdef
+lcd_classdef = apo_object.classdefinition
+string ls_datatype
+choose case lcd_classdef.datatypeof
+	case "commandbutton", "vprogressbar", "vtrackbar", "statichyperlink", "singlelineedit", "statictext", &
+		"picturebutton", "checkbox", "datawindow", "radiobutton", "inkedit", "inkpicture", "animation", &
+		"groupbox", "datepicker", "olecustomcontrol", "treeview", "listview", "graph", "monthcalendar", &
+		"listbox", "dropdownlistbox", "picturelistbox", "dropdownpicturelistbox", "picture", "picturehyperlink",&
+		"hscrollbar", "vscrollbar", "hprogressbar", "htrackbar", "editmask", "richtextedit", "multilineedit"
+		ls_datatype = "dragobject"		
+	case "tab", "userobject"
+		ls_datatype = "dragobject"
+	case else
+		ls_datatype = lcd_classdef.datatypeof
+end choose
+return ls_datatype
+
+end function
+
+public subroutine show_data (any aa_val, singlelineedit a_sle, dropdownlistbox a_ddlb);
+a_sle.text = tostring(aa_val)
+a_ddlb.selectitem(classname(aa_val), 0)
+
+end subroutine
 
 event open;
 list = create uo_list
@@ -465,6 +558,11 @@ tab_1.tabpage_vector.gb_2.text = "Version : " + vector.getversion()
 tab_1.tabpage_vector.st_count_v.text = "items :" + string(vector.size())
 tab_1.tabpage_vector.st_max_v.text = "max = " + string(vector.maxsize( ))
 
+tab_1.tabpage_list.ddlb_datatype.selectitem("string", 0)
+tab_1.tabpage_vector.ddlb_datatype_vect.selectitem("string", 0)
+
+of_addtips( )
+
 end event
 
 event close;
@@ -475,11 +573,13 @@ if isvalid(vector) then destroy vector
 end event
 
 on w_test.create
+if this.MenuName = "m_main" then this.MenuID = create m_main
 this.tab_1=create tab_1
 this.Control[]={this.tab_1}
 end on
 
 on w_test.destroy
+if IsValid(MenuID) then destroy(MenuID)
 destroy(this.tab_1)
 end on
 
@@ -525,6 +625,7 @@ end on
 type tabpage_list from userobject within tab_1
 event create ( )
 event destroy ( )
+event show_data ( any aa_val )
 integer x = 18
 integer y = 112
 integer width = 2985
@@ -568,6 +669,7 @@ st_x st_x
 cb_bench cb_bench
 st_time st_time
 gb_1 gb_1
+gb_3 gb_3
 end type
 
 on tabpage_list.create
@@ -606,6 +708,7 @@ this.st_x=create st_x
 this.cb_bench=create cb_bench
 this.st_time=create st_time
 this.gb_1=create gb_1
+this.gb_3=create gb_3
 this.Control[]={this.ddlb_sort_datatype,&
 this.st_3,&
 this.ddlb_datatype,&
@@ -640,7 +743,8 @@ this.sle_testcount,&
 this.st_x,&
 this.cb_bench,&
 this.st_time,&
-this.gb_1}
+this.gb_1,&
+this.gb_3}
 end on
 
 on tabpage_list.destroy
@@ -679,9 +783,16 @@ destroy(this.st_x)
 destroy(this.cb_bench)
 destroy(this.st_time)
 destroy(this.gb_1)
+destroy(this.gb_3)
 end on
 
+event show_data(any aa_val);
+show_data(aa_val, sle_data, ddlb_datatype)
+
+end event
+
 type ddlb_sort_datatype from dropdownlistbox within tabpage_list
+string tag = "TT:Datatype used for comparison during sort."
 integer x = 978
 integer y = 964
 integer width = 498
@@ -707,8 +818,8 @@ type st_3 from statictext within tabpage_list
 integer x = 114
 integer y = 320
 integer width = 343
-integer height = 52
-integer textsize = -8
+integer height = 68
+integer textsize = -10
 integer weight = 400
 fontcharset fontcharset = ansi!
 fontpitch fontpitch = variable!
@@ -733,7 +844,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-boolean sorted = false
 boolean vscrollbar = true
 string item[] = {"string","integer","long","date","datetime","time","decimal","object (use path-name)"}
 borderstyle borderstyle = stylelowered!
@@ -744,7 +854,7 @@ end event
 
 type cbx_null from checkbox within tabpage_list
 integer x = 288
-integer y = 220
+integer y = 212
 integer width = 165
 integer height = 80
 integer textsize = -8
@@ -762,6 +872,7 @@ event clicked;tab_1.tabpage_list.sle_data.enabled = NOT checked
 end event
 
 type cb_sort from commandbutton within tabpage_list
+string tag = "TT:Sort the list."
 integer x = 539
 integer y = 956
 integer width = 402
@@ -783,7 +894,7 @@ list_data( )
 end event
 
 type cb_multibench from commandbutton within tabpage_list
-integer x = 992
+integer x = 978
 integer y = 1112
 integer width = 571
 integer height = 84
@@ -868,7 +979,7 @@ end event
 
 type sle_data from singlelineedit within tabpage_list
 integer x = 466
-integer y = 216
+integer y = 208
 integer width = 1179
 integer height = 84
 integer taborder = 30
@@ -886,7 +997,7 @@ end type
 
 type st_2 from statictext within tabpage_list
 integer x = 119
-integer y = 216
+integer y = 208
 integer width = 210
 integer height = 84
 integer textsize = -10
@@ -902,6 +1013,7 @@ boolean focusrectangle = false
 end type
 
 type cb_prepend from commandbutton within tabpage_list
+string tag = "TT:Add at the start of list."
 integer x = 114
 integer y = 444
 integer width = 402
@@ -924,8 +1036,9 @@ list_data( )
 end event
 
 type cb_get from commandbutton within tabpage_list
+string tag = "TT:Get value at the given index (if any) or current internal index of list."
 integer x = 539
-integer y = 440
+integer y = 444
 integer width = 402
 integer height = 112
 integer taborder = 30
@@ -946,15 +1059,15 @@ else
 	t = list.get()
 end if
 
-sle_data.text = tostring(t)
-
+parent.event show_data(t)
 
 end event
 
 type cb_delete from commandbutton within tabpage_list
-integer x = 969
-integer y = 444
-integer width = 608
+string tag = "TT:Remove element at the given index (if any) or current internal index of list."
+integer x = 539
+integer y = 700
+integer width = 402
 integer height = 112
 integer taborder = 30
 integer textsize = -10
@@ -963,7 +1076,7 @@ fontcharset fontcharset = ansi!
 fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
-string text = "remove / remove at"
+string text = "remove / at"
 end type
 
 event clicked;if sle_index.text <> "" then
@@ -1106,8 +1219,9 @@ boolean focusrectangle = false
 end type
 
 type cb_purge from commandbutton within tabpage_list
+string tag = "TT:Remove all elements of list."
 integer x = 539
-integer y = 700
+integer y = 828
 integer width = 402
 integer height = 112
 integer taborder = 40
@@ -1127,8 +1241,9 @@ list_data( )
 end event
 
 type cb_set from commandbutton within tabpage_list
+string tag = "TT:Set value at the given index (if any) or current internal index of list."
 integer x = 539
-integer y = 568
+integer y = 572
 integer width = 402
 integer height = 112
 integer taborder = 30
@@ -1176,11 +1291,7 @@ if index > 0 then
 	sle_index.text = string(index)
 	any la_val
 	la_val = list.getat(index)
-	if isnull(la_val) then
-		sle_data.text = "<null>"
-	else
-		sle_data.text = string(la_val)
-	end if
+	parent.event show_data(la_val)
 end if
 end event
 
@@ -1236,7 +1347,7 @@ end type
 
 type pb_rewind from picturebutton within tabpage_list
 integer x = 1006
-integer y = 828
+integer y = 664
 integer width = 110
 integer height = 96
 integer taborder = 30
@@ -1258,8 +1369,8 @@ list_data( )
 end event
 
 type pb_prev from picturebutton within tabpage_list
-integer x = 1147
-integer y = 828
+integer x = 1138
+integer y = 664
 integer width = 110
 integer height = 96
 integer taborder = 30
@@ -1277,7 +1388,7 @@ end type
 event clicked;any t
 
 t = list.getprevious( )
-sle_data.text = tostring(t)
+tab_1.tabpage_list.event show_data(t)
 
 cbx_hasnext.checked = list.hasnext()
 
@@ -1286,8 +1397,8 @@ list_data( )
 end event
 
 type pb_next from picturebutton within tabpage_list
-integer x = 1289
-integer y = 828
+integer x = 1271
+integer y = 664
 integer width = 110
 integer height = 96
 integer taborder = 30
@@ -1305,7 +1416,7 @@ end type
 event clicked;any t
 
 t = list.getnext()
-sle_data.text = tostring(t)
+tab_1.tabpage_list.event show_data(t)
 
 cbx_hasnext.checked = list.hasnext()
 list_data( )
@@ -1313,8 +1424,8 @@ list_data( )
 end event
 
 type cb_first from commandbutton within tabpage_list
-integer x = 987
-integer y = 700
+integer x = 965
+integer y = 444
 integer width = 402
 integer height = 112
 integer taborder = 30
@@ -1324,20 +1435,18 @@ fontcharset fontcharset = ansi!
 fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
-string text = "first"
+string text = "get first"
 end type
 
 event clicked;any t
 
 t = list.getfirst()
-
-sle_data.text = tostring(t)
-
+parent.event show_data(t)
 end event
 
 type cb_last from commandbutton within tabpage_list
-integer x = 1417
-integer y = 700
+integer x = 1390
+integer y = 444
 integer width = 402
 integer height = 112
 integer taborder = 30
@@ -1347,20 +1456,20 @@ fontcharset fontcharset = ansi!
 fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
-string text = "last"
+string text = "get last"
 end type
 
 event clicked;any t
 
 t = list.getlast()
-
-sle_data.text = tostring(t)
+parent.event show_data(t)
 
 end event
 
 type cb_append from commandbutton within tabpage_list
+string tag = "TT:Add at the end of list."
 integer x = 114
-integer y = 568
+integer y = 572
 integer width = 402
 integer height = 112
 integer taborder = 20
@@ -1381,6 +1490,7 @@ list_data( )
 end event
 
 type cb_insert from commandbutton within tabpage_list
+string tag = "TT:Insert at the current internal index of list."
 integer x = 114
 integer y = 700
 integer width = 402
@@ -1403,6 +1513,7 @@ list_data( )
 end event
 
 type cb_before from commandbutton within tabpage_list
+string tag = "TT:Insert before the given index of list."
 integer x = 114
 integer y = 828
 integer width = 402
@@ -1426,6 +1537,7 @@ list_data( )
 end event
 
 type cb_after from commandbutton within tabpage_list
+string tag = "TT:Insert after the given index of list."
 integer x = 114
 integer y = 956
 integer width = 402
@@ -1449,9 +1561,9 @@ list_data( )
 end event
 
 type cbx_hasnext from checkbox within tabpage_list
-integer x = 1440
-integer y = 836
-integer width = 402
+integer x = 1408
+integer y = 672
+integer width = 379
 integer height = 80
 integer textsize = -10
 integer weight = 400
@@ -1508,9 +1620,9 @@ boolean focusrectangle = false
 end type
 
 type cb_bench from commandbutton within tabpage_list
-integer x = 987
+integer x = 978
 integer y = 1200
-integer width = 521
+integer width = 571
 integer height = 84
 integer taborder = 20
 integer textsize = -10
@@ -1624,9 +1736,27 @@ long backcolor = 67108864
 string text = "none"
 end type
 
+type gb_3 from groupbox within tabpage_list
+integer x = 969
+integer y = 580
+integer width = 827
+integer height = 232
+integer taborder = 50
+integer textsize = -8
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Tahoma"
+long textcolor = 33554432
+long backcolor = 67108864
+string text = "Internal index"
+end type
+
 type tabpage_vector from userobject within tab_1
 event create ( )
 event destroy ( )
+event show_data ( any aa_val )
 integer x = 18
 integer y = 112
 integer width = 2985
@@ -1671,6 +1801,7 @@ cb_prepend_v cb_prepend_v
 st_1 st_1
 sle_data_v sle_data_v
 gb_2 gb_2
+gb_index gb_index
 end type
 
 on tabpage_vector.create
@@ -1710,6 +1841,7 @@ this.cb_prepend_v=create cb_prepend_v
 this.st_1=create st_1
 this.sle_data_v=create sle_data_v
 this.gb_2=create gb_2
+this.gb_index=create gb_index
 this.Control[]={this.ddlb_sort_datatype_vect,&
 this.st_4,&
 this.ddlb_datatype_vect,&
@@ -1745,7 +1877,8 @@ this.cb_get_v,&
 this.cb_prepend_v,&
 this.st_1,&
 this.sle_data_v,&
-this.gb_2}
+this.gb_2,&
+this.gb_index}
 end on
 
 on tabpage_vector.destroy
@@ -1785,10 +1918,16 @@ destroy(this.cb_prepend_v)
 destroy(this.st_1)
 destroy(this.sle_data_v)
 destroy(this.gb_2)
+destroy(this.gb_index)
 end on
 
+event show_data(any aa_val);
+show_data(aa_val, sle_data_v, ddlb_datatype_vect)
+
+end event
+
 type ddlb_sort_datatype_vect from dropdownlistbox within tabpage_vector
-integer x = 987
+integer x = 978
 integer y = 964
 integer width = 498
 integer height = 556
@@ -1810,11 +1949,11 @@ event constructor;this.selectitem( 1 )
 end event
 
 type st_4 from statictext within tabpage_vector
-integer x = 133
+integer x = 114
 integer y = 320
-integer width = 279
-integer height = 52
-integer textsize = -8
+integer width = 343
+integer height = 68
+integer textsize = -10
 integer weight = 400
 fontcharset fontcharset = ansi!
 fontpitch fontpitch = variable!
@@ -1822,12 +1961,12 @@ fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
 long backcolor = 67108864
-string text = "data type"
+string text = "data type:"
 boolean focusrectangle = false
 end type
 
 type ddlb_datatype_vect from dropdownlistbox within tabpage_vector
-integer x = 471
+integer x = 466
 integer y = 308
 integer width = 855
 integer height = 740
@@ -1839,7 +1978,6 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
-boolean sorted = false
 boolean vscrollbar = true
 string item[] = {"string","integer","long","date","datetime","time","decimal","object (use path-name)"}
 borderstyle borderstyle = stylelowered!
@@ -1850,7 +1988,7 @@ end event
 
 type cbx_null_vect from checkbox within tabpage_vector
 integer x = 288
-integer y = 208
+integer y = 212
 integer width = 165
 integer height = 80
 integer textsize = -8
@@ -1889,7 +2027,7 @@ list_data( )
 end event
 
 type cb_multibench_v from commandbutton within tabpage_vector
-integer x = 992
+integer x = 978
 integer y = 1112
 integer width = 571
 integer height = 84
@@ -2017,7 +2155,7 @@ clipboard(ls_text)
 end event
 
 type cb_bench_v from commandbutton within tabpage_vector
-integer x = 987
+integer x = 978
 integer y = 1200
 integer width = 521
 integer height = 84
@@ -2133,9 +2271,9 @@ end if
 end event
 
 type cbx_hasnext_v from checkbox within tabpage_vector
-integer x = 1440
-integer y = 836
-integer width = 402
+integer x = 1408
+integer y = 672
+integer width = 379
 integer height = 80
 integer textsize = -10
 integer weight = 400
@@ -2151,7 +2289,7 @@ end type
 
 type cb_after_v from commandbutton within tabpage_vector
 integer x = 114
-integer y = 952
+integer y = 956
 integer width = 402
 integer height = 112
 integer taborder = 30
@@ -2219,7 +2357,7 @@ end event
 
 type cb_append_v from commandbutton within tabpage_vector
 integer x = 114
-integer y = 568
+integer y = 572
 integer width = 402
 integer height = 112
 integer taborder = 40
@@ -2240,8 +2378,8 @@ list_data( )
 end event
 
 type cb_last_v from commandbutton within tabpage_vector
-integer x = 1417
-integer y = 700
+integer x = 1390
+integer y = 444
 integer width = 402
 integer height = 112
 integer taborder = 40
@@ -2251,19 +2389,19 @@ fontcharset fontcharset = ansi!
 fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
-string text = "last"
+string text = "get last"
 end type
 
 event clicked;any t
 
 t = vector.getlast()
-sle_data_v.text = tostring(t)
+parent.event show_data(t)
 
 end event
 
 type cb_first_v from commandbutton within tabpage_vector
-integer x = 987
-integer y = 700
+integer x = 965
+integer y = 444
 integer width = 402
 integer height = 112
 integer taborder = 50
@@ -2273,21 +2411,19 @@ fontcharset fontcharset = ansi!
 fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
-string text = "first"
+string text = "get first"
 end type
 
 event clicked;any t
 
 t = vector.getfirst()
-
-sle_data_v.text = tostring(t)
-
+parent.event show_data(t)
 
 end event
 
 type pb_next_v from picturebutton within tabpage_vector
-integer x = 1289
-integer y = 828
+integer x = 1271
+integer y = 664
 integer width = 110
 integer height = 96
 integer taborder = 40
@@ -2313,8 +2449,8 @@ list_data( )
 end event
 
 type pb_prev_v from picturebutton within tabpage_vector
-integer x = 1147
-integer y = 828
+integer x = 1138
+integer y = 664
 integer width = 110
 integer height = 96
 integer taborder = 40
@@ -2341,7 +2477,7 @@ end event
 
 type pb_rewind_v from picturebutton within tabpage_vector
 integer x = 1006
-integer y = 828
+integer y = 664
 integer width = 110
 integer height = 96
 integer taborder = 40
@@ -2364,7 +2500,7 @@ end event
 
 type sle_index_v from singlelineedit within tabpage_vector
 integer x = 658
-integer y = 84
+integer y = 92
 integer width = 402
 integer height = 92
 integer taborder = 30
@@ -2380,7 +2516,7 @@ end type
 
 type st_5 from statictext within tabpage_vector
 integer x = 119
-integer y = 96
+integer y = 104
 integer width = 526
 integer height = 84
 integer textsize = -10
@@ -2434,13 +2570,15 @@ end type
 event selectionchanged;
 if index > 0 then
 	sle_index_v.text = string(index)
-	sle_data_v.text = vector.getat(index)
+	any la_val
+	la_val = vector.getat(index)
+	parent.event show_data(la_val)
 end if
 end event
 
 type cb_set_v from commandbutton within tabpage_vector
 integer x = 539
-integer y = 568
+integer y = 572
 integer width = 402
 integer height = 112
 integer taborder = 40
@@ -2466,7 +2604,7 @@ end event
 
 type cb_purge_v from commandbutton within tabpage_vector
 integer x = 539
-integer y = 700
+integer y = 828
 integer width = 402
 integer height = 112
 integer taborder = 50
@@ -2517,7 +2655,7 @@ string facename = "Tahoma"
 string text = "debugstring"
 end type
 
-event clicked;outputdebugstring( "foo...bar")
+event clicked;outputdebugstring("foo...bar")
 
 end event
 
@@ -2615,9 +2753,9 @@ event clicked;//
 end event
 
 type cb_delete_v from commandbutton within tabpage_vector
-integer x = 969
-integer y = 444
-integer width = 608
+integer x = 539
+integer y = 700
+integer width = 402
 integer height = 112
 integer taborder = 50
 integer textsize = -10
@@ -2626,7 +2764,7 @@ fontcharset fontcharset = ansi!
 fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Tahoma"
-string text = "remove / remove at"
+string text = "remove / at"
 end type
 
 event clicked;if sle_index_v.text <> "" then
@@ -2641,7 +2779,7 @@ end event
 
 type cb_get_v from commandbutton within tabpage_vector
 integer x = 539
-integer y = 440
+integer y = 444
 integer width = 402
 integer height = 112
 integer taborder = 40
@@ -2662,8 +2800,7 @@ else
 	t = vector.get()
 end if
 
-sle_data_v.text = tostring(t)
-
+parent.event show_data(t)
 
 end event
 
@@ -2707,7 +2844,7 @@ boolean focusrectangle = false
 end type
 
 type sle_data_v from singlelineedit within tabpage_vector
-integer x = 471
+integer x = 466
 integer y = 208
 integer width = 1179
 integer height = 84
@@ -2738,6 +2875,23 @@ fontfamily fontfamily = swiss!
 string facename = "Tahoma"
 long textcolor = 33554432
 long backcolor = 67108864
-string text = "none"
+string text = "pbx version"
+end type
+
+type gb_index from groupbox within tabpage_vector
+integer x = 969
+integer y = 580
+integer width = 827
+integer height = 232
+integer taborder = 40
+integer textsize = -8
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Tahoma"
+long textcolor = 33554432
+long backcolor = 67108864
+string text = "Internal index"
 end type
 
