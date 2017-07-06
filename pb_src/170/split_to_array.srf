@@ -1,0 +1,34 @@
+﻿$PBExportHeader$split_to_array.srf
+$PBExportComments$Splits a string into an array using a character separator
+global type split_to_array from function_object
+end type
+
+forward prototypes
+global function boolean split_to_array (string as_string, string as_separator, ref string as_array[])
+end prototypes
+
+global function boolean split_to_array (string as_string, string as_separator, ref string as_array[]);long d_pos, f_pos, seplength
+string vide[]
+seplength = len( as_separator )
+as_array = vide
+if isnull(as_string) or as_string = "" then 
+	return false
+end if
+
+d_pos = 1
+f_pos = pos(as_string,as_separator)
+if f_pos = 0 then 
+	as_array[ upperbound(as_array) + 1 ] = as_string
+else
+	do
+		as_array[ upperbound(as_array) + 1 ] = mid( as_string, d_pos, f_pos - d_pos)
+		d_pos = f_pos + seplength
+		f_pos = pos(as_string,as_separator,d_pos)
+	loop while f_pos > 0
+	as_array[ upperbound(as_array) + 1 ] = mid( as_string, d_pos)
+end if
+
+return true
+
+end function
+

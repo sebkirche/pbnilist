@@ -1,0 +1,15 @@
+﻿$PBExportHeader$to_any.srf
+$PBExportComments$Convertit n'importe quoi en any
+global type to_any from function_object
+end type
+
+forward prototypes
+global function any to_any (any aa_arg)
+end prototypes
+
+global function any to_any (any aa_arg);// Seems dumb, huh?
+
+return aa_arg
+
+end function
+

@@ -1,0 +1,27 @@
+﻿$PBExportHeader$listdemo.srj
+EXE:listdemo125.exe,,0,0,1
+CMP:0,0,0,2,0,0,1
+COM:Conceptware
+DES:
+CPY:
+PRD:demo de l'extension pbnilist
+PVS:1.0.0.2
+PVN:1,0,0,2
+FVS:1.0.0.2
+FVN:1,0,0,2
+MAN:0,asInvoker,0
+PBD:listdemo125.pbl,,0
+PBD:pbniregex115.pbd,,1
+PBD:pbnilist125.pbd,,1
+OBJ:c:\dev\powerbuilder\pbni\pbnilist\listdemo125.pbl,anyiterator_factory,f
+OBJ:c:\dev\powerbuilder\pbni\pbnilist\listdemo125.pbl,m_main,m
+OBJ:C:\dev\powerbuilder\pbni\pbnilist\listdemo125.pbl,listdemo125,a
+OBJ:c:\dev\powerbuilder\pbni\pbnilist\listdemo125.pbl,w_test,w
+OBJ:c:\dev\powerbuilder\pbni\pbnilist\listdemo125.pbl,anyiterator,u
+OBJ:c:\dev\powerbuilder\pbni\pbnilist\listdemo125.pbl,debug_message,f
+OBJ:c:\dev\powerbuilder\pbni\pbnilist\listdemo125.pbl,nv_benchmark,u
+OBJ:C:\dev\powerbuilder\pbni\pbnilist\pbniregex115.pbd,fastreplaceall,f
+OBJ:C:\dev\powerbuilder\pbni\pbnilist\pbnilist125.pbd,uo_list,u
+OBJ:c:\dev\powerbuilder\pbni\pbnilist\listdemo125.pbl,split_to_array_of_longs,f
+OBJ:C:\dev\powerbuilder\pbni\pbnilist\pbnilist125.pbd,uo_vector,u
+OBJ:c:\dev\powerbuilder\pbni\pbnilist\listdemo125.pbl,n_tooltip,u

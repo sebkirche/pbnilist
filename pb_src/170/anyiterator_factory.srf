@@ -1,0 +1,14 @@
+﻿$PBExportHeader$anyiterator_factory.srf
+global type anyiterator_factory from function_object
+end type
+
+forward prototypes
+global function anyiterator anyiterator_factory ()
+end prototypes
+
+global function anyiterator anyiterator_factory ();anyiterator it_new
+
+return it_new
+
+end function
+
